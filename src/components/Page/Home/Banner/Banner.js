@@ -4,7 +4,7 @@ import Model from '../../../../assests/easy.jpg';
 const Banner = () => {
   return (
     <div>
-      <div className='bg-[#ccffff] h-[540px] lg:flex md:flex sm:flex'>
+      <div className='bg-[#ccffff] max-h-[540px] lg:flex md:flex sm:flex'>
         <div className='w-full lg:w-1/2 md:w-1/2 sm:w-full rounded flex items-center justify-center'>
           <div>
             <div className='my-6 '>
