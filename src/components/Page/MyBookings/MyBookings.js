@@ -1,7 +1,9 @@
+
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
 import BookingRow from './BookingRow';
 import pic from '../../../assests/EasyModel1.jpg';
+import Swal from 'sweetalert2';
 
 const MyBookings = () => {
   const { user } = useContext(AuthContext);
@@ -20,6 +22,28 @@ const MyBookings = () => {
         });
     }
   }, [Url, user]);
+
+  const handleDelete = (id) => {
+    // Optimistically update the UI
+    setBookings((prevBookings) => prevBookings.filter((booking) => booking._id !== id));
+
+    // Make the DELETE request
+    fetch(`http://localhost:5000/bookings/${id}`, {
+      method: 'DELETE',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.deletedCount > 0) {
+          // Data removed successfully from the server
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+          });
+        }
+      });
+  };
 
   if (user === null) {
     // Handle the loading state or show a loading spinner
@@ -46,11 +70,12 @@ const MyBookings = () => {
               <th>Price</th>
               <th>Category</th>
               <th>Action</th>
+              <th><button className="btn btn-outline btn-warning">Pay</button></th>
             </tr>
           </thead>
           <tbody>
             {bookings.map((booking, index) => (
-              <BookingRow key={booking._id} index={index + 1} booking={booking} />
+              <BookingRow key={booking._id} index={index + 1} booking={booking} onDelete={handleDelete} />
             ))}
           </tbody>
         </table>
